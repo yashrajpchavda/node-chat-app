@@ -21,11 +21,13 @@ io.on( "connection", ( socket ) => {
 
   socket.broadcast.emit( "newMessage", generateMessage( "Admin", "New user has joined" ) );
 
-  socket.on( "createMessage", ( message ) => {
+  socket.on( "createMessage", ( message, callback ) => {
     console.log( "createMessage", message );
 
     // to broadcast to everyone
     io.emit( "newMessage", generateMessage( message.from, message.text ) );
+
+    callback( "This message is from server" );
 
     // to broadcast everyone but the socket
     // socket.broadcast.emit( "newMessage", {

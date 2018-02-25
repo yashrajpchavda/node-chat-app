@@ -13,7 +13,17 @@ const io = socketIO( server );
 app.use( express.static( publicPath ) );
 
 io.on( "connection", ( socket ) => {
-  console.log( "New user connnected" );
+  console.log( "New user connected" );
+
+  socket.emit( "newMessage", {
+    from: "James",
+    text: "Hi folks! How are you all?",
+    createdAt: 123
+  } );
+
+  socket.on( "createMessage", ( newMessage ) => {
+    console.log( "createMessage", newMessage );
+  } );
 
   socket.on( "disconnect", () => {
     console.log( "User has been disconnected" );

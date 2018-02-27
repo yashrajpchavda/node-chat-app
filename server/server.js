@@ -27,7 +27,7 @@ io.on( "connection", ( socket ) => {
     // to broadcast to everyone
     io.emit( "newMessage", generateMessage( message.from, message.text ) );
 
-    callback( "This message is from server" );
+    callback();
 
   } );
 

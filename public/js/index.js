@@ -11,8 +11,9 @@ socket.on( "disconnect", function () {
 socket.on( "newMessage", function ( message ) {
   console.log( "newMessage", message );
 
+  var formattedTime = moment( message.createdAt ).format( "h:mm a" );
   var $messageList = jQuery( "#message-list" );
-  var $listItem = jQuery( "<li>" ).text( `${message.from}: ${message.text}` );
+  var $listItem = jQuery( "<li>" ).text( `${message.from} ${formattedTime}: ${message.text}` );
 
   $messageList.append( $listItem );
 
@@ -20,6 +21,7 @@ socket.on( "newMessage", function ( message ) {
 
 socket.on( "newLocationMessage", function ( message ) {
 
+  var formattedTime = moment( message.createdAt ).format( "h:mm a" );
   var $messageList = jQuery( "#message-list" );
   var $listItem = jQuery( "<li>" );
   var $a = jQuery( "<a>" )
@@ -27,7 +29,7 @@ socket.on( "newLocationMessage", function ( message ) {
     .attr( "target", "_blank" )
     .attr( "href", message.url );
 
-  $listItem.text( `${message.from}: ` );
+  $listItem.text( `${message.from} ${formattedTime}: ` );
   $listItem.append( $a );
 
   $messageList.append( $listItem );

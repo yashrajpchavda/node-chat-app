@@ -21,10 +21,17 @@ function scrollToBottom () {
 
 socket.on( "connect", function () {
   console.log( "Connected to server" );
-} );
 
-socket.on( "disconnect", function () {
-  console.log( "Disconnected from server" );
+  var params = jQuery.deparam( window.location.search );
+
+  socket.emit( "join", params, function ( err ) {
+    if ( err ) {
+      alert( err );
+      window.location.href = "/";
+    } else {
+      console.log( "No error" );
+    }
+  } );
 } );
 
 socket.on( "newMessage", function ( message ) {
@@ -59,6 +66,24 @@ socket.on( "newLocationMessage", function ( message ) {
 
 } );
 
+socket.on( "updateUserList", function ( users ) {
+  console.log( "Users List", users );
+
+  var $ol = jQuery( "<ol>" );
+
+  users.forEach( function ( user ) {
+    var $li = jQuery( "<li>" ).text( user );
+    $ol.append( $li );
+  } );
+
+  jQuery( "#users" ).html( $ol );
+
+} );
+
+socket.on( "disconnect", function () {
+  console.log( "Disconnected from server" );
+} );
+
 jQuery( document ).ready( function () {
 
   jQuery( "#message-form" ).on( "submit", function ( event ) {
@@ -67,7 +92,6 @@ jQuery( document ).ready( function () {
     var $messageInput = jQuery( "#message" );
 
     socket.emit( "createMessage", {
-      from: "User",
       text: $messageInput.val()
     }, function ( data ) {
       $messageInput.val( "" );
